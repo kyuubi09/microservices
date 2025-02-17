@@ -1,17 +1,24 @@
 terraform {
   required_providers {
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "5.87.0"
     }
   }
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = var.region
   default_tags {
     tags = {
-        owner = "pafable"
+      owner = "pafable"
     }
   }
+}
+
+
+variable "region" {
+  description = "aws region"
+  default     = "us-east-2"
+
 }
