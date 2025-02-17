@@ -2,7 +2,8 @@ locals {
   ami_type               = "AL2_x86_64"
   azs                    = slice(data.aws_availability_zones.available.names, 0, 3)
   capacity_type          = "SPOT"
-  cluster_version        = "1.20"
+  cluster_name           = "microservices"
+  cluster_version        = "1.30.5"
   disk_size              = 30
   enable_cluster_creater = true
   enable_nat_gateway     = true
@@ -18,16 +19,18 @@ locals {
   vpc_cidr               = "10.0.0.16"
 }
 
+data "aws_availability_zones" "available" {}
+
 
 module "vpc" {
   source             = "terraform-aws-modules/vpc/aws"
   version            = "5.19.0"
-  name               = "my-vpc"
-  azs                = ""
-  cidr               = ""
-  intra_subnets      = ""
-  private_subnets    = ""
-  public_subnets     = ""
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  name               = "${local.cluster_name}-vpc"
+  azs                = local.azs
+  cidr               = local.vpc_cidr
+  intra_subnets      = local.intra_subnets
+  private_subnets    = local.private_subnets
+  public_subnets     = local.public_subnets
+  enable_nat_gateway = local.enable_nat_gateway
+  single_nat_gateway = local.single_nat_gateway
 }
